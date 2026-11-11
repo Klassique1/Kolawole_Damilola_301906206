@@ -1,0 +1,60 @@
+# Distributed & Cloud Deployment Blueprint — NovaPay Fintech Ltd
+# Designed as a reusable multi-AZ / polyglot topology template
+
+platform:
+  case_study: novapay
+  environment: production-reference
+  cloud_region_primary: af-south-1
+
+relational_cluster:
+  engine: postgresql-17
+  database: novapay_core
+  connection_pooler:
+    tool: pgbouncer
+    pool_mode: transaction
+    max_client_conn: 2000
+    default_pool_size: 80
+  replication_topology:
+    primary:
+      role: read_write
+      availability_zone: az-1
+      synchronous_commit: remote_apply
+      wal_level: replica
+    sync_standby:
+      role: hot_standby_failover
+      availability_zone: az-2
+      target_rpo_seconds: 0
+      target_rto_seconds: 15
+    async_read_replica:
+      role: reporting_and_statements
+      availability_zone: az-3
+      purpose: Offloads Portfolio 2 analytical queries and statement reads from Primary
+  partitioning_and_archival:
+    table: core.ledger_entries_partitioned
+    strategy: RANGE (posted_at) monthly
+    hot_retention_months: 12
+    cold_archive_target: s3://novapay-compliance-archive/ledger-parquet/
+  sharding_strategy:
+    horizontal_shard_key: customer_id
+    extension_target: citus
+    hotspot_mitigation:
+      pattern: striped_internal_clearing_accounts
+      buckets: 16
+      note: Splits SETTLEMENT_POOL and FEE_REVENUE across 16 sub-accounts to avoid row-lock contention
+
+nosql_cluster:
+  engine: mongodb-9
+  database: novapay_telemetry
+  replica_set:
+    name: rs-novapay-telemetry
+    members: 3
+    write_concern: majority
+    read_concern: majority
+  sharding:
+    collection: fraud_risk_events
+    shard_key:
+      customer_id: hashed
+    rationale: Uniformly distributes high-velocity telemetry writes across shards without monotonic hotspot
+  lifecycle:
+    ttl_index_field: created_at
+    expire_after_seconds: 7776000

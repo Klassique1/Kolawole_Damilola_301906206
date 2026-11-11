@@ -1,0 +1,81 @@
+{
+  "partitions": [
+    [
+      "ledger_entries_p_2026_05",
+      "FOR VALUES FROM ('2026-05-01 01:00:00+01') TO ('2026-06-01 01:00:00+01')",
+      19882,
+      "4552 kB"
+    ],
+    [
+      "ledger_entries_p_2026_06",
+      "FOR VALUES FROM ('2026-06-01 01:00:00+01') TO ('2026-07-01 01:00:00+01')",
+      31210,
+      "6928 kB"
+    ],
+    [
+      "ledger_entries_p_2026_07",
+      "FOR VALUES FROM ('2026-07-01 01:00:00+01') TO ('2026-08-01 01:00:00+01')",
+      32244,
+      "7168 kB"
+    ],
+    [
+      "ledger_entries_p_2026_08",
+      "FOR VALUES FROM ('2026-08-01 01:00:00+01') TO ('2026-09-01 01:00:00+01')",
+      32244,
+      "7176 kB"
+    ],
+    [
+      "ledger_entries_p_2026_09",
+      "FOR VALUES FROM ('2026-09-01 01:00:00+01') TO ('2026-10-01 01:00:00+01')",
+      31210,
+      "6928 kB"
+    ],
+    [
+      "ledger_entries_p_2026_10",
+      "FOR VALUES FROM ('2026-10-01 01:00:00+01') TO ('2026-11-01 01:00:00+01')",
+      32244,
+      "7168 kB"
+    ],
+    [
+      "ledger_entries_p_2026_11",
+      "FOR VALUES FROM ('2026-11-01 01:00:00+01') TO ('2026-12-01 01:00:00+01')",
+      11204,
+      "2528 kB"
+    ],
+    [
+      "ledger_entries_p_2026_12",
+      "FOR VALUES FROM ('2026-12-01 01:00:00+01') TO ('2027-01-01 01:00:00+01')",
+      0,
+      "16 kB"
+    ],
+    [
+      "ledger_entries_p_default",
+      "DEFAULT",
+      0,
+      "16 kB"
+    ]
+  ],
+  "pruning_plan": "Limit  (cost=1077.50..1077.55 rows=20 width=41) (actual time=6.098..6.101 rows=20 loops=1)\n  Buffers: shared hit=500\n  ->  Sort  (cost=1077.50..1079.03 rows=610 width=41) (actual time=6.088..6.090 rows=20 loops=1)\n        Sort Key: ledger_entries_partitioned.posted_at DESC\n        Sort Method: top-N heapsort  Memory: 27kB\n        Buffers: shared hit=500\n        ->  Seq Scan on ledger_entries_p_2026_10 ledger_entries_partitioned  (cost=0.00..1061.27 rows=610 width=41) (actual time=0.019..5.967 rows=610 loops=1)\n              Filter: ((posted_at >= '2026-10-01 01:00:00+01'::timestamp with time zone) AND (posted_at < '2026-11-01 01:00:00+01'::timestamp with time zone) AND (amount >= 250000.0000))\n              Rows Removed by Filter: 31634\n              Buffers: shared hit=497\nPlanning:\n  Buffers: shared hit=183\nPlanning Time: 2.329 ms\nExecution Time: 6.130 ms",
+  "replication": {
+    "replica_tested": true,
+    "pg_stat_replication": [
+      {
+        "pid": 14236,
+        "usename": "postgres",
+        "application_name": "walreceiver",
+        "client_addr": "127.0.0.1/32",
+        "state": "streaming",
+        "sync_state": "async",
+        "sent_lsn": "0/2B0B0770",
+        "write_lsn": "0/2B0B0770",
+        "flush_lsn": "0/2B0B0770",
+        "replay_lsn": "0/2B0B0770"
+      }
+    ],
+    "standby_in_recovery": true,
+    "standby_port": 5433,
+    "marker_propagated": true,
+    "marker_id": "repl-probe-cee426c704",
+    "standby_readonly_guard": "PASS (SQLSTATE 25006: cannot execute INSERT in a read-only transaction)"
+  }
+}
