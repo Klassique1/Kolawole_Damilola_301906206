@@ -66,7 +66,7 @@ advanced-database-portfolio/
 ## 4. Portfolio Progress Tracker
 
 - [x] Foundation, reusable `core/` framework, documentation, and local toolchain
-- [ ] Portfolio 1: Database Design and Modelling
+- [x] Portfolio 1: Database Design and Modelling
 - [ ] Portfolio 2: Query Processing and Optimisation
 - [ ] Portfolio 3: Transactions and Concurrency
 - [ ] Portfolio 4: NoSQL and Advanced Data Models

@@ -1,0 +1,101 @@
+erDiagram
+    CURRENCIES ||--o{ ACCOUNTS : "denominates"
+    CURRENCIES ||--o{ TRANSACTIONS : "settles_in"
+    KYC_TIERS ||--o{ CUSTOMERS : "governs_limits"
+    ACCOUNT_TYPES ||--o{ ACCOUNTS : "classifies"
+    CUSTOMERS ||--o{ ACCOUNTS : "owns"
+    CUSTOMERS ||--o{ TRANSACTIONS : "initiates"
+    ACCOUNTS ||--o{ TRANSACTIONS : "source_account"
+    ACCOUNTS ||--o{ TRANSACTIONS : "destination_account"
+    TRANSACTIONS ||--o| TRANSACTIONS : "reversed_by"
+    TRANSACTIONS ||--o{ LEDGER_ENTRIES : "posts"
+    ACCOUNTS ||--o{ LEDGER_ENTRIES : "records"
+
+    CURRENCIES {
+        char_3 currency_code PK
+        varchar currency_name
+        smallint minor_unit
+        boolean is_active
+    }
+
+    KYC_TIERS {
+        varchar tier_code PK
+        varchar tier_name UK
+        numeric single_txn_limit
+        numeric daily_txn_limit
+        numeric max_wallet_balance
+        boolean requires_bvn_nin
+    }
+
+    ACCOUNT_TYPES {
+        varchar account_type_code PK
+        varchar display_name UK
+        boolean is_customer_facing
+        boolean allow_negative_balance
+        numeric monthly_fee_amount
+    }
+
+    CUSTOMERS {
+        uuid customer_id PK
+        varchar full_name
+        varchar email UK
+        varchar phone_number UK
+        varchar kyc_tier_code FK
+        enum status
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    ACCOUNTS {
+        uuid account_id PK
+        char_10 account_number UK
+        uuid customer_id FK
+        varchar account_type_code FK
+        char_3 currency_code FK
+        numeric balance
+        numeric available_balance
+        enum status
+        bigint version
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    TRANSACTIONS {
+        uuid transaction_id PK
+        varchar reference_code UK
+        varchar idempotency_key UK
+        enum transaction_type
+        uuid source_account_id FK
+        uuid destination_account_id FK
+        char_3 currency_code FK
+        numeric amount
+        numeric fee_amount
+        enum status
+        uuid reversed_transaction_id FK
+        varchar narration
+        uuid initiated_by_customer_id FK
+        timestamptz created_at
+        timestamptz completed_at
+    }
+
+    LEDGER_ENTRIES {
+        bigint entry_id PK
+        uuid transaction_id FK
+        uuid account_id FK
+        enum direction
+        numeric amount
+        numeric balance_after
+        varchar narration
+        timestamptz posted_at
+    }
+
+    AUDIT_LOGS {
+        bigint audit_id PK
+        varchar entity_name
+        text entity_id
+        varchar action
+        jsonb old_state
+        jsonb new_state
+        varchar actor
+        timestamptz recorded_at
+    }

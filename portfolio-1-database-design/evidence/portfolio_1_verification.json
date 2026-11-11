@@ -1,0 +1,87 @@
+{
+  "trial_balance": [
+    [
+      "NP-INIT-0001",
+      "DEPOSIT",
+      "COMPLETED",
+      "10000000.0000",
+      "10000000.0000",
+      "0.0000"
+    ],
+    [
+      "NP-REV-1003",
+      "REVERSAL",
+      "COMPLETED",
+      "25000.0000",
+      "25000.0000",
+      "0.0000"
+    ],
+    [
+      "NP-TXN-1001",
+      "TRANSFER",
+      "COMPLETED",
+      "500000.0000",
+      "500000.0000",
+      "0.0000"
+    ],
+    [
+      "NP-TXN-1002",
+      "TRANSFER",
+      "COMPLETED",
+      "150000.0000",
+      "150000.0000",
+      "0.0000"
+    ],
+    [
+      "NP-TXN-1003",
+      "TRANSFER",
+      "REVERSED",
+      "25000.0000",
+      "25000.0000",
+      "0.0000"
+    ]
+  ],
+  "account_reconciliation": [
+    [
+      "3010000001",
+      "SAVINGS_WALLET",
+      "350000.0000",
+      "350000.0000",
+      "0.0000"
+    ],
+    [
+      "3010000002",
+      "CURRENT_WALLET",
+      "150000.0000",
+      "150000.0000",
+      "0.0000"
+    ],
+    [
+      "3010000003",
+      "SAVINGS_WALLET",
+      "0.0000",
+      "0.0000",
+      "0.0000"
+    ],
+    [
+      "9000000000",
+      "EXTERNAL_CONTRA",
+      "-10000000.0000",
+      "-10000000.0000",
+      "0.0000"
+    ],
+    [
+      "9000000001",
+      "SETTLEMENT_POOL",
+      "9500000.0000",
+      "9500000.0000",
+      "0.0000"
+    ]
+  ],
+  "constraint_count": 104,
+  "guardrails": {
+    "ledger_update_blocked": "PASS (SQLSTATE 42501: core.ledger_entries is append-only; UPDATE operations are prohibited)",
+    "negative_wallet_blocked": "PASS (SQLSTATE 23514: new row for relation \"accounts\" violates check constraint \"accounts_check\")",
+    "closed_loop_system_sum": "PASS (SUM(balance) = 0.0000)"
+  }
+}
