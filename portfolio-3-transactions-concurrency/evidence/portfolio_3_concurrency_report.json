@@ -1,0 +1,137 @@
+{
+  "scenario_1_atomicity": {
+    "accounts": {
+      "source": "5288303692",
+      "destination": "5628448696"
+    },
+    "commit_result": "Locked transfer 25000.0000 succeeded (100000.0000 -> 75000.0000)",
+    "rollback_result": "Rolled back cleanly on SQLSTATE 23514: new row for relation \"accounts\" violates check constraint \"accounts_check\"",
+    "final_balances": {
+      "5288303692": "75000.0000",
+      "5628448696": "45000.0000"
+    },
+    "atomicity_verified": true
+  },
+  "concurrent_scenarios": [
+    {
+      "scenario_name": "Scenario 2: Unlocked READ COMMITTED (Lost Update / Double-Spend)",
+      "isolation_level": "READ_COMMITTED",
+      "outcomes": [
+        {
+          "worker_name": "Worker-A",
+          "succeeded": true,
+          "attempts": 1,
+          "elapsed_ms": 201.0,
+          "sqlstate": "00000",
+          "message": "Debited 40000.0000 from stale read 50000.0000 -> 10000.0000"
+        },
+        {
+          "worker_name": "Worker-B",
+          "succeeded": true,
+          "attempts": 1,
+          "elapsed_ms": 185.45,
+          "sqlstate": "00000",
+          "message": "Debited 40000.0000 from stale read 50000.0000 -> 10000.0000"
+        }
+      ],
+      "invariant_passed": false,
+      "invariant_details": "stored_balance=10000.0000, ledger_computed_balance=-30000.0000, variance=40000.0000"
+    },
+    {
+      "scenario_name": "Scenario 3: Pessimistic Row Locking (SELECT ... FOR UPDATE)",
+      "isolation_level": "READ_COMMITTED",
+      "outcomes": [
+        {
+          "worker_name": "Worker-A",
+          "succeeded": false,
+          "attempts": 1,
+          "elapsed_ms": 106.66,
+          "sqlstate": null,
+          "message": "Insufficient balance (10000.0000 < 40000.0000); cleanly rejected"
+        },
+        {
+          "worker_name": "Worker-B",
+          "succeeded": true,
+          "attempts": 1,
+          "elapsed_ms": 105.28,
+          "sqlstate": "00000",
+          "message": "Locked transfer 40000.0000 succeeded (50000.0000 -> 10000.0000)"
+        }
+      ],
+      "invariant_passed": true,
+      "invariant_details": "stored_balance=10000.0000, ledger_computed_balance=10000.0000, variance=0.0000"
+    },
+    {
+      "scenario_name": "Scenario 4A: Unordered Bidirectional Locking (Deadlock Triggered)",
+      "isolation_level": "READ_COMMITTED",
+      "outcomes": [
+        {
+          "worker_name": "Session-X-then-Y",
+          "succeeded": false,
+          "attempts": 1,
+          "elapsed_ms": 1078.37,
+          "sqlstate": "40P01",
+          "message": "deadlock detected"
+        },
+        {
+          "worker_name": "Session-Y-then-X",
+          "succeeded": true,
+          "attempts": 1,
+          "elapsed_ms": 1076.9,
+          "sqlstate": "00000",
+          "message": "Acquired both locks"
+        }
+      ],
+      "invariant_passed": true,
+      "invariant_details": "stored_balance=100000.0000, ledger_computed_balance=100000.0000, variance=0.0000"
+    },
+    {
+      "scenario_name": "Scenario 4B: Deterministic Ordered Locking (Zero Deadlocks)",
+      "isolation_level": "READ_COMMITTED",
+      "outcomes": [
+        {
+          "worker_name": "Session-X-to-Y",
+          "succeeded": true,
+          "attempts": 1,
+          "elapsed_ms": 75.85,
+          "sqlstate": "00000",
+          "message": "Locked transfer 15000.0000 succeeded (100000.0000 -> 85000.0000)"
+        },
+        {
+          "worker_name": "Session-Y-to-X",
+          "succeeded": true,
+          "attempts": 1,
+          "elapsed_ms": 91.84,
+          "sqlstate": "00000",
+          "message": "Locked transfer 10000.0000 succeeded (115000.0000 -> 105000.0000)"
+        }
+      ],
+      "invariant_passed": true,
+      "invariant_details": "stored_balance=95000.0000, ledger_computed_balance=95000.0000, variance=0.0000"
+    },
+    {
+      "scenario_name": "Scenario 5: SERIALIZABLE Isolation (SSI + Retry Backoff)",
+      "isolation_level": "SERIALIZABLE",
+      "outcomes": [
+        {
+          "worker_name": "Worker-A",
+          "succeeded": true,
+          "attempts": 1,
+          "elapsed_ms": 89.45,
+          "sqlstate": "00000",
+          "message": "Debited 40000.0000 from stale read 50000.0000 -> 10000.0000"
+        },
+        {
+          "worker_name": "Worker-B",
+          "succeeded": false,
+          "attempts": 2,
+          "elapsed_ms": 193.63,
+          "sqlstate": null,
+          "message": "Insufficient balance (10000.0000 < 40000.0000) (after retry from SQLSTATE 40001)"
+        }
+      ],
+      "invariant_passed": true,
+      "invariant_details": "stored_balance=10000.0000, ledger_computed_balance=10000.0000, variance=0.0000"
+    }
+  ]
+}
