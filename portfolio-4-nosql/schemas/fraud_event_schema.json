@@ -1,0 +1,73 @@
+{
+  "bsonType": "object",
+  "required": [
+    "event_id",
+    "transaction_ref",
+    "customer_id",
+    "channel",
+    "amount_ngn",
+    "risk_score",
+    "decision",
+    "device",
+    "rule_hits",
+    "created_at"
+  ],
+  "properties": {
+    "event_id": {
+      "bsonType": "string",
+      "minLength": 8,
+      "description": "Unique telemetry event identifier"
+    },
+    "transaction_ref": {
+      "bsonType": "string",
+      "pattern": "^NP-",
+      "description": "Correlates to core.transactions.reference_code in PostgreSQL"
+    },
+    "customer_id": {
+      "bsonType": "string",
+      "description": "Correlates to core.customers.customer_id in PostgreSQL"
+    },
+    "channel": {
+      "enum": ["MOBILE_APP", "WEB", "USSD", "API"],
+      "description": "Origination payment channel"
+    },
+    "amount_ngn": {
+      "bsonType": ["double", "int", "long", "decimal"],
+      "minimum": 1
+    },
+    "risk_score": {
+      "bsonType": ["int", "double"],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "decision": {
+      "enum": ["ALLOW", "CHALLENGE", "BLOCK"]
+    },
+    "device": {
+      "bsonType": "object",
+      "required": ["fingerprint_hash", "ip_country"],
+      "properties": {
+        "fingerprint_hash": { "bsonType": "string" },
+        "ip_country": { "bsonType": "string", "minLength": 2, "maxLength": 2 },
+        "os": { "bsonType": "string" },
+        "app_version": { "bsonType": "string" },
+        "cell_tower_id": { "bsonType": "string" }
+      }
+    },
+    "rule_hits": {
+      "bsonType": "array",
+      "items": {
+        "bsonType": "object",
+        "required": ["rule_code", "weight"],
+        "properties": {
+          "rule_code": { "bsonType": "string" },
+          "weight": { "bsonType": ["int", "double"], "minimum": 0 },
+          "detail": { "bsonType": "string" }
+        }
+      }
+    },
+    "created_at": {
+      "bsonType": "date"
+    }
+  }
+}

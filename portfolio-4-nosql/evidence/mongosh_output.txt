@@ -1,0 +1,158 @@
+﻿=== Collection Stats ===
+25000
+=== Active Indexes ===
+[
+  {
+    v: 2,
+    key: {
+      _id: 1
+    },
+    name: '_id_'
+  },
+  {
+    v: 2,
+    key: {
+      event_id: 1
+    },
+    name: 'uq_event_id',
+    unique: true
+  },
+  {
+    v: 2,
+    key: {
+      decision: 1,
+      channel: 1,
+      created_at: -1
+    },
+    name: 'idx_decision_channel_created'
+  },
+  {
+    v: 2,
+    key: {
+      'rule_hits.rule_code': 1
+    },
+    name: 'idx_rule_hits_code'
+  },
+  {
+    v: 2,
+    key: {
+      created_at: 1
+    },
+    name: 'idx_ttl_90d_created_at',
+    expireAfterSeconds: 7776000
+  }
+]
+=== Sample High-Risk Document ===
+{
+  _id: ObjectId('6af4a880807e8247649bb388'),
+  event_id: 'evt_00025000',
+  transaction_ref: 'NP-BTXN-025000',
+  customer_id: 'cust-1000',
+  channel: 'MOBILE_APP',
+  amount_ngn: 260000,
+  risk_score: 87,
+  decision: 'BLOCK',
+  device: {
+    fingerprint_hash: 'dev_mule_01',
+    ip_country: 'GH',
+    os: 'Android 15',
+    app_version: '4.12.0'
+  },
+  rule_hits: [
+    {
+      rule_code: 'NEW_DEVICE_LOGIN',
+      weight: 25,
+      detail: 'Unrecognized hardware fingerprint'
+    },
+    {
+      rule_code: 'BENEFICIARY_FAN_IN',
+      weight: 40,
+      detail: 'Multiple senders targeting single wallet'
+    }
+  ],
+  created_at: ISODate('2026-11-11T17:40:15.485Z')
+}
+=== Channel Risk Summary Aggregation ===
+[
+  {
+    _id: {
+      channel: 'API',
+      decision: 'ALLOW'
+    },
+    events: 5833,
+    avg_risk_score: 12.505057431853249,
+    total_amount_ngn: 69167000
+  },
+  {
+    _id: {
+      channel: 'API',
+      decision: 'CHALLENGE'
+    },
+    events: 417,
+    avg_risk_score: 50.57553956834533,
+    total_amount_ngn: 5833000
+  },
+  {
+    _id: {
+      channel: 'MOBILE_APP',
+      decision: 'ALLOW'
+    },
+    events: 5417,
+    avg_risk_score: 12.34742477386007,
+    total_amount_ngn: 62295500
+  },
+  {
+    _id: {
+      channel: 'MOBILE_APP',
+      decision: 'BLOCK'
+    },
+    events: 625,
+    avg_risk_score: 82.6672,
+    total_amount_ngn: 162500000
+  },
+  {
+    _id: {
+      channel: 'MOBILE_APP',
+      decision: 'CHALLENGE'
+    },
+    events: 208,
+    avg_risk_score: 50.95673076923077,
+    total_amount_ngn: 2392000
+  },
+  {
+    _id: {
+      channel: 'USSD',
+      decision: 'ALLOW'
+    },
+    events: 5833,
+    avg_risk_score: 12.269672552717298,
+    total_amount_ngn: 67074500
+  },
+  {
+    _id: {
+      channel: 'USSD',
+      decision: 'CHALLENGE'
+    },
+    events: 417,
+    avg_risk_score: 49.83693045563549,
+    total_amount_ngn: 4800500
+  },
+  {
+    _id: {
+      channel: 'WEB',
+      decision: 'ALLOW'
+    },
+    events: 5834,
+    avg_risk_score: 12.633184778882413,
+    total_amount_ngn: 65006000
+  },
+  {
+    _id: {
+      channel: 'WEB',
+      decision: 'CHALLENGE'
+    },
+    events: 416,
+    avg_risk_score: 50.62740384615385,
+    total_amount_ngn: 3744000
+  }
+]

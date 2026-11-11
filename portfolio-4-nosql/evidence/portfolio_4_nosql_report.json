@@ -1,0 +1,163 @@
+{
+  "collection": "fraud_risk_events",
+  "total_documents": 25000,
+  "schema_validation_test": "PASS (MongoDB rejected invalid doc with code 121: Document failed validation)",
+  "explain_before_index": {
+    "winning_plan": "SORT -> COLLSCAN",
+    "execution_time_ms": 24,
+    "docs_examined": 25000,
+    "keys_examined": 0,
+    "n_returned": 625
+  },
+  "explain_after_index": {
+    "winning_plan": "FETCH -> IXSCAN (idx_decision_channel_created)",
+    "execution_time_ms": 8,
+    "docs_examined": 625,
+    "keys_examined": 625,
+    "n_returned": 625
+  },
+  "aggregations": {
+    "channel_risk_summary": [
+      {
+        "_id": {
+          "channel": "API",
+          "decision": "ALLOW"
+        },
+        "events": 5833,
+        "avg_risk_score": 12.505057431853249,
+        "total_amount_ngn": 69167000.0
+      },
+      {
+        "_id": {
+          "channel": "API",
+          "decision": "CHALLENGE"
+        },
+        "events": 417,
+        "avg_risk_score": 50.57553956834533,
+        "total_amount_ngn": 5833000.0
+      },
+      {
+        "_id": {
+          "channel": "MOBILE_APP",
+          "decision": "ALLOW"
+        },
+        "events": 5417,
+        "avg_risk_score": 12.34742477386007,
+        "total_amount_ngn": 62295500.0
+      },
+      {
+        "_id": {
+          "channel": "MOBILE_APP",
+          "decision": "BLOCK"
+        },
+        "events": 625,
+        "avg_risk_score": 82.6672,
+        "total_amount_ngn": 162500000.0
+      },
+      {
+        "_id": {
+          "channel": "MOBILE_APP",
+          "decision": "CHALLENGE"
+        },
+        "events": 208,
+        "avg_risk_score": 50.95673076923077,
+        "total_amount_ngn": 2392000.0
+      },
+      {
+        "_id": {
+          "channel": "USSD",
+          "decision": "ALLOW"
+        },
+        "events": 5833,
+        "avg_risk_score": 12.269672552717298,
+        "total_amount_ngn": 67074500.0
+      },
+      {
+        "_id": {
+          "channel": "USSD",
+          "decision": "CHALLENGE"
+        },
+        "events": 417,
+        "avg_risk_score": 49.83693045563549,
+        "total_amount_ngn": 4800500.0
+      },
+      {
+        "_id": {
+          "channel": "WEB",
+          "decision": "ALLOW"
+        },
+        "events": 5834,
+        "avg_risk_score": 12.633184778882413,
+        "total_amount_ngn": 65006000.0
+      },
+      {
+        "_id": {
+          "channel": "WEB",
+          "decision": "CHALLENGE"
+        },
+        "events": 416,
+        "avg_risk_score": 50.62740384615385,
+        "total_amount_ngn": 3744000.0
+      }
+    ],
+    "top_triggered_rules": [
+      {
+        "_id": "BENEFICIARY_FAN_IN",
+        "trigger_count": 562,
+        "avg_weight": 40.0
+      },
+      {
+        "_id": "GEO_MISMATCH",
+        "trigger_count": 556,
+        "avg_weight": 35.0
+      },
+      {
+        "_id": "VEL_1H_SPIKE",
+        "trigger_count": 555,
+        "avg_weight": 30.0
+      },
+      {
+        "_id": "NEW_DEVICE_LOGIN",
+        "trigger_count": 518,
+        "avg_weight": 25.0
+      },
+      {
+        "_id": "NIGHT_HIGH_VALUE",
+        "trigger_count": 517,
+        "avg_weight": 20.0
+      }
+    ],
+    "suspected_mule_device_clusters": [
+      {
+        "_id": "dev_mule_03",
+        "blocked_events": 117,
+        "total_flagged_ngn": 30420000.0,
+        "distinct_customer_count": 10
+      },
+      {
+        "_id": "dev_mule_01",
+        "blocked_events": 116,
+        "total_flagged_ngn": 30160000.0,
+        "distinct_customer_count": 10
+      },
+      {
+        "_id": "dev_mule_05",
+        "blocked_events": 114,
+        "total_flagged_ngn": 29640000.0,
+        "distinct_customer_count": 10
+      },
+      {
+        "_id": "dev_mule_04",
+        "blocked_events": 111,
+        "total_flagged_ngn": 28860000.0,
+        "distinct_customer_count": 10
+      },
+      {
+        "_id": "dev_mule_02",
+        "blocked_events": 107,
+        "total_flagged_ngn": 27820000.0,
+        "distinct_customer_count": 10
+      }
+    ]
+  }
+}
