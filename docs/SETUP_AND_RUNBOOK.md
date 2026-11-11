@@ -1,6 +1,6 @@
-# Setup, Isolated GitHub & Operations Runbook
+# Setup, GitHub & Operations Runbook
 
-This runbook provides reproducible, production-standard steps to install the local database stack, isolate GitHub credentials for a separate GitHub account, run portfolio modules progressively, and verify every deliverable.
+This runbook provides reproducible steps to install the local database stack, configure repository-scoped GitHub SSH/HTTPS authentication, initialise databases, run portfolio modules progressively, and verify every deliverable.
 
 ---
 
@@ -52,48 +52,48 @@ Get-Service postgresql*, MongoDB*
 
 ---
 
-## 2. Isolated GitHub Account Configuration (Critical Security Step)
+## 2. Repository-Scoped GitHub Configuration
 
-To push this repository to a **separate GitHub account** without affecting your default/global GitHub credentials—and **without ever storing tokens or passwords in the repository or chat**:
+To configure GitHub authentication cleanly at the repository level without storing tokens or passwords in the codebase:
 
 ### Option A: Dedicated SSH Key *(Recommended — Production Standard)*
 
-1. **Generate a dedicated Ed25519 SSH key pair** (never store keys inside the repo):
+1. **Generate an Ed25519 SSH key pair** (never store keys inside the repo):
    ```powershell
-   ssh-keygen -t ed25519 -C "your_portfolio_email@example.com" -f "$env:USERPROFILE\.ssh\id_ed25519_mit_portfolio"
+   ssh-keygen -t ed25519 -C "your_email@example.com" -f "$env:USERPROFILE\.ssh\id_ed25519_github"
    ```
-2. **Copy the public key** and add it to the **target GitHub account** under *GitHub -> Settings -> SSH and GPG keys -> New SSH key*:
+2. **Copy the public key** and add it to GitHub under *Settings -> SSH and GPG keys -> New SSH key*:
    ```powershell
-   Get-Content "$env:USERPROFILE\.ssh\id_ed25519_mit_portfolio.pub" | Set-Clipboard
+   Get-Content "$env:USERPROFILE\.ssh\id_ed25519_github.pub" | Set-Clipboard
    ```
 3. **Configure repo-local Git identity & SSH command** inside `advanced-database-portfolio/`:
    ```powershell
    git init -b main
    git config --local user.name "Your Portfolio Name"
-   git config --local user.email "your_portfolio_email@example.com"
-   git config --local core.sshCommand "ssh -i ~/.ssh/id_ed25519_mit_portfolio -o IdentitiesOnly=yes"
-   git remote add origin git@github.com:<SECOND_GITHUB_USERNAME>/advanced-database-portfolio.git
+   git config --local user.email "your_email@example.com"
+   git config --local core.sshCommand "ssh -i ~/.ssh/id_ed25519_github -o IdentitiesOnly=yes"
+   git remote add origin git@github.com:<GITHUB_USERNAME>/<REPO_NAME>.git
    ```
 4. **Verify SSH authentication before pushing:**
    ```powershell
-   ssh -i "$env:USERPROFILE\.ssh\id_ed25519_mit_portfolio" -o IdentitiesOnly=yes -T git@github.com
+   ssh -i "$env:USERPROFILE\.ssh\id_ed25519_github" -o IdentitiesOnly=yes -T git@github.com
    ```
-   Expected output: `Hi <SECOND_GITHUB_USERNAME>! You've successfully authenticated...`
+   Expected output: `Hi <GITHUB_USERNAME>! You've successfully authenticated...`
 
 ### Option B: Repo-Scoped HTTPS via Git Credential Manager
 If you prefer HTTPS instead of SSH:
 ```powershell
 git init -b main
 git config --local user.name "Your Portfolio Name"
-git config --local user.email "your_portfolio_email@example.com"
-git config --local credential.https://github.com.username "<SECOND_GITHUB_USERNAME>"
-git remote add origin https://<SECOND_GITHUB_USERNAME>@github.com/<SECOND_GITHUB_USERNAME>/<REPO_NAME>.git
+git config --local user.email "your_email@example.com"
+git config --local credential.https://github.com.username "<GITHUB_USERNAME>"
+git remote add origin https://<GITHUB_USERNAME>@github.com/<GITHUB_USERNAME>/<REPO_NAME>.git
 ```
-Embedding the secondary username in the remote URL while keeping `credential.useHttpPath` unset lets Git Credential Manager isolate `git:https://<SECOND_GITHUB_USERNAME>@github.com` separately from any default `github.com` login on your machine.
+Embedding your GitHub username in the remote URL while keeping `credential.useHttpPath` unset lets Git Credential Manager manage authentication securely outside the repository.
 
 ### Assessor Access Requirement (PDF Section 5 & 6)
 1. Ensure the GitHub repository visibility is set to **Private**.
-2. Before submitting on the LMS, invite your course assessor/lecturer as a collaborator under *Repository -> Settings -> Collaborators* so the GitHub link is accessible.
+2. Before submitting on the LMS, verify the private repository is accessible to the course assessor (for example, by inviting their provided GitHub account under *Repository -> Settings -> Collaborators*).
 
 ---
 

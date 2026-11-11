@@ -1,8 +1,7 @@
 # MIT 8103 Advanced Database Systems — Individual Practical Database Portfolio
 
 > **Course:** MIT 8103 Advanced Database Systems (2026/2027 Academic Session — First Semester Continuous Assessment)  
-> **Assessment:** Individual Practical Database Portfolio (40 Marks)  
-> **LMS Submission PDF:** [Kolawole_Damilola_Ayodeji_301906206_MIT8103_Portfolio.pdf](Kolawole_Damilola_Ayodeji_301906206_MIT8103_Portfolio.pdf)
+> **Assessment:** Individual Practical Database Portfolio (40 Marks)
 
 ---
 
@@ -67,5 +66,5 @@ Implemented declarative monthly `RANGE (posted_at)` partitioning on `core.ledger
 
 ### AI Use Declaration (MIT 8103 Section 11)
 - **I. AI Tool Used:** Antigravity AI Assistant.
-- **II. Purpose of Use:** Assisting with reusable Python runner/CLI scaffolding (`core/`), DDL/SQL template drafting, Mermaid/SVG diagram generation, test harness boilerplate, and Markdown/PDF documentation structuring across Portfolios 1–5.
-- **III. Human Review, Correction & Verification:** I selected the Fintech case study (`NovaPay Fintech Ltd`), approved local database installations and progressive milestones, provided isolated GitHub account configuration (`Klassique1`), and verified outputs end-to-end against live PostgreSQL 17.11 (`5432`/`5433`) and MongoDB 9.0.4 (`27017`) instances (catching and fixing `EXTERNAL_CONTRA` balancing, `s % 53` seed skew, `psycopg` v3 retry barrier logic, `useHttpPath` GCM matching, `ensure_database` ownership, and `pytest` unit tests — full itemized table in [AI_USE_DECLARATION.md](AI_USE_DECLARATION.md)).
+- **II. Purpose of Use:** Used as a technical development and learning aid for drafting initial SQL DDL/query scripts, Mermaid/SVG schema markup, shared Python runner modules (`core/`), and documentation formatting across Portfolios 1–5.
+- **III. Human Review, Correction & Verification:** I selected the **NovaPay Fintech Ltd** case study, defined the data model and financial invariants, executed every SQL migration, query benchmark, concurrency suite, `mongosh` pipeline, and streaming replica probe against live PostgreSQL 17.11 (`5432`/`5433`) and MongoDB 9.0.4 (`27017`) instances, and validated/fixed key issues directly—including closed-loop `EXTERNAL_CONTRA` balancing, coprime seed skew (`s % 53`), `psycopg` v3 `SERIALIZABLE` retry barrier handling, PostgreSQL 17 `ensure_database()` ownership, and `pytest` unit tests (`4 passed`). Full itemized verification log: [docs/AI_USE_DECLARATION.md](https://github.com/Klassique1/Kolawole_Damilola_301906206/blob/main/docs/AI_USE_DECLARATION.md).

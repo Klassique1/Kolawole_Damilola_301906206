@@ -64,7 +64,7 @@ advanced-database-portfolio/
 
 ## 3. Setup & Quickstart
 
-See [docs/SETUP_AND_RUNBOOK.md](docs/SETUP_AND_RUNBOOK.md) for local installation, isolated GitHub configuration, and execution steps.
+See [docs/SETUP_AND_RUNBOOK.md](docs/SETUP_AND_RUNBOOK.md) for local installation, GitHub configuration, and execution steps.
 """
 
 

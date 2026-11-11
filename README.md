@@ -47,9 +47,9 @@ advanced-database-portfolio/
 ├── portfolio-3-transactions-concurrency/ # COMMIT/ROLLBACK, isolation, locking, concurrency tests
 ├── portfolio-4-nosql/                    # MongoDB JSON Schema model, indexes, aggregations
 ├── portfolio-5-distributed-cloud/        # Partitioning, replication, sharding, CAP/cloud architecture
-├── core/                                 # Reusable, domain-agnostic DB runners & scaffolder
-├── docs/                                 # Setup runbook, reusability guide, LMS blueprint, AI log
-├── templates/                            # Blank manifest template for cloning to new domains
+├── core/                                 # Shared DB runners, CLI & project utilities
+├── docs/                                 # Setup runbook, modular architecture guide, LMS blueprint, AI log
+├── templates/                            # Schema manifest template for case_study.json
 ├── tests/                                # Automated unit tests for core tooling
 ├── case_study.json                       # Single source of truth for case study metadata
 └── README.md
@@ -60,8 +60,8 @@ advanced-database-portfolio/
 ## 3. Documentation Index
 
 - **[Final LMS Portfolio Report (Markdown)](docs/LMS_FINAL_REPORT_DRAFT.md)** & **[Submission PDF](docs/Kolawole_Damilola_Ayodeji_301906206_MIT8103_Portfolio.pdf)** — Complete 3-page summary across Portfolios 1–5, ER diagram, evidence outputs, reflection, references, and AI declaration.
-- **[Setup, Isolated GitHub & Operations Runbook](docs/SETUP_AND_RUNBOOK.md)** — Local software install, isolated secondary GitHub setup, DB init, and progressive run workflow.
-- **[Reusability & Multi-Case-Study Guide](docs/REUSABILITY_GUIDE.md)** — How to clone and adapt this production architecture for any other case study.
+- **[Setup, GitHub & Operations Runbook](docs/SETUP_AND_RUNBOOK.md)** — Local database stack installation, GitHub SSH/HTTPS configuration, database initialisation, and progressive run workflow.
+- **[Modular Architecture & Extensibility Guide](docs/REUSABILITY_GUIDE.md)** — How shared database tooling in `core/` separates engine execution from case-study configuration in `case_study.json`.
 - **[LMS Final Documentation Blueprint](docs/LMS_SUBMISSION_GUIDE.md)** — Structure and pre-submission checklist for the LMS report.
 - **[Academic Integrity & AI Use Declaration](docs/AI_USE_DECLARATION.md)** — Audit log of AI assistance, human review, and verification steps.
 
