@@ -1,0 +1,102 @@
+{
+  "baseline": [
+    {
+      "name": "Q1: Paginated Wallet Statement (Last 25 Ledger Postings)",
+      "phase": "baseline",
+      "planning_time_ms": 0.211,
+      "execution_time_ms": 9.691,
+      "total_time_ms": 9.902,
+      "shared_hit_blocks": 2928,
+      "shared_read_blocks": 0,
+      "top_node_type": "Seq Scan",
+      "actual_rows": 25,
+      "plan_text": "Limit  (cost=5308.25..5308.31 rows=25 width=60) (actual time=9.652..9.655 rows=25 loops=1)\n  Buffers: shared hit=2928\n  ->  Sort  (cost=5308.25..5308.48 rows=93 width=60) (actual time=9.650..9.652 rows=25 loops=1)\n        Sort Key: posted_at DESC, entry_id DESC\n        Sort Method: top-N heapsort  Memory: 31kB\n        Buffers: shared hit=2928\n        ->  Seq Scan on ledger_entries  (cost=0.00..5305.62 rows=93 width=60) (actual time=2.182..9.618 rows=99 loops=1)\n              Filter: (account_id = '36c27cba-fdda-439e-b0d8-67d90e26f1a0'::uuid)\n              Rows Removed by Filter: 190111\n              Buffers: shared hit=2928\nPlanning Time: 0.211 ms\nExecution Time: 9.691 ms"
+    },
+    {
+      "name": "Q2: High-Value Failed & Pending Settlements (Last 30 Days)",
+      "phase": "baseline",
+      "planning_time_ms": 0.177,
+      "execution_time_ms": 13.394,
+      "total_time_ms": 13.571,
+      "shared_hit_blocks": 2509,
+      "shared_read_blocks": 0,
+      "top_node_type": "Seq Scan",
+      "actual_rows": 16,
+      "plan_text": "Limit  (cost=4759.82..4759.89 rows=29 width=75) (actual time=13.366..13.369 rows=16 loops=1)\n  Buffers: shared hit=2509\n  ->  Sort  (cost=4759.82..4759.89 rows=29 width=75) (actual time=13.364..13.366 rows=16 loops=1)\n        Sort Key: created_at DESC\n        Sort Method: quicksort  Memory: 27kB\n        Buffers: shared hit=2509\n        ->  Seq Scan on transactions  (cost=0.00..4759.11 rows=29 width=75) (actual time=1.075..13.343 rows=16 loops=1)\n              Filter: ((status = ANY ('{FAILED,PENDING}'::core.transaction_status_enum[])) AND (amount >= 250000.0000) AND (created_at >= (now() - '30 days'::interval)))\n              Rows Removed by Filter: 99989\n              Buffers: shared hit=2509\nPlanning Time: 0.177 ms\nExecution Time: 13.394 ms"
+    },
+    {
+      "name": "Q3: 14-Day Completed Settlement & Fee Reconciliation",
+      "phase": "baseline",
+      "planning_time_ms": 0.107,
+      "execution_time_ms": 27.509,
+      "total_time_ms": 27.616,
+      "shared_hit_blocks": 2509,
+      "shared_read_blocks": 0,
+      "top_node_type": "Seq Scan",
+      "actual_rows": 3,
+      "plan_text": "Sort  (cost=4580.81..4580.82 rows=2 width=76) (actual time=27.482..27.483 rows=3 loops=1)\n  Sort Key: (sum(amount)) DESC\n  Sort Method: quicksort  Memory: 25kB\n  Buffers: shared hit=2509\n  ->  HashAggregate  (cost=4580.77..4580.80 rows=2 width=76) (actual time=27.470..27.473 rows=3 loops=1)\n        Group Key: transaction_type\n        Batches: 1  Memory Usage: 24kB\n        Buffers: shared hit=2509\n        ->  Seq Scan on transactions  (cost=0.00..4509.10 rows=7167 width=13) (actual time=0.008..25.783 rows=7284 loops=1)\n              Filter: ((status = 'COMPLETED'::core.transaction_status_enum) AND (created_at >= (now() - '14 days'::interval)))\n              Rows Removed by Filter: 92721\n              Buffers: shared hit=2509\nPlanning Time: 0.107 ms\nExecution Time: 27.509 ms"
+    },
+    {
+      "name": "Q4: Case-Insensitive Customer KYC & Wallet Exposure Lookup",
+      "phase": "baseline",
+      "planning_time_ms": 0.392,
+      "execution_time_ms": 0.824,
+      "total_time_ms": 1.216,
+      "shared_hit_blocks": 103,
+      "shared_read_blocks": 0,
+      "top_node_type": "Seq Scan + Index Scan",
+      "actual_rows": 1,
+      "plan_text": "Nested Loop  (cost=67.33..170.67 rows=10 width=268) (actual time=0.769..0.789 rows=1 loops=1)\n  Buffers: shared hit=103\n  ->  Hash Join  (cost=67.17..156.49 rows=10 width=109) (actual time=0.757..0.777 rows=1 loops=1)\n        Hash Cond: (a.customer_id = c.customer_id)\n        Buffers: shared hit=101\n        ->  Seq Scan on accounts a  (cost=0.00..84.05 rows=2005 width=48) (actual time=0.020..0.129 rows=2005 loops=1)\n              Buffers: shared hit=64\n        ->  Hash  (cost=67.05..67.05 rows=10 width=77) (actual time=0.481..0.481 rows=1 loops=1)\n              Buckets: 1024  Batches: 1  Memory Usage: 9kB\n              Buffers: shared hit=37\n              ->  Seq Scan on customers c  (cost=0.00..67.05 rows=10 width=77) (actual time=0.137..0.476 rows=1 loops=1)\n                    Filter: (lower((email)::text) = 'bench_cust_0420@novapay-demo.ng'::text)\n                    Rows Removed by Filter: 2002\n                    Buffers: shared hit=37\n  ->  Memoize  (cost=0.16..3.77 rows=1 width=216) (actual time=0.011..0.011 rows=1 loops=1)\n        Cache Key: c.kyc_tier_code\n        Cache Mode: logical\n        Hits: 0  Misses: 1  Evictions: 0  Overflows: 0  Memory Usage: 1kB\n        Buffers: shared hit=2\n        ->  Index Scan using kyc_tiers_pkey on kyc_tiers k  (cost=0.15..3.76 rows=1 width=216) (actual time=0.009..0.009 rows=1 loops=1)\n              Index Cond: ((tier_code)::text = (c.kyc_tier_code)::text)\n              Buffers: shared hit=2\nPlanning:\n  Buffers: shared hit=6\nPlanning Time: 0.392 ms\nExecution Time: 0.824 ms"
+    }
+  ],
+  "optimised": [
+    {
+      "name": "Q1: Paginated Wallet Statement (Last 25 Ledger Postings)",
+      "phase": "optimised",
+      "planning_time_ms": 0.088,
+      "execution_time_ms": 0.038,
+      "total_time_ms": 0.126,
+      "shared_hit_blocks": 4,
+      "shared_read_blocks": 0,
+      "top_node_type": "Index Only Scan",
+      "actual_rows": 25,
+      "plan_text": "Limit  (cost=0.42..3.01 rows=25 width=60) (actual time=0.015..0.019 rows=25 loops=1)\n  Buffers: shared hit=4\n  ->  Index Only Scan using idx_ledger_account_posted_desc on ledger_entries  (cost=0.42..10.05 rows=93 width=60) (actual time=0.014..0.017 rows=25 loops=1)\n        Index Cond: (account_id = '36c27cba-fdda-439e-b0d8-67d90e26f1a0'::uuid)\n        Heap Fetches: 0\n        Buffers: shared hit=4\nPlanning Time: 0.088 ms\nExecution Time: 0.038 ms"
+    },
+    {
+      "name": "Q2: High-Value Failed & Pending Settlements (Last 30 Days)",
+      "phase": "optimised",
+      "planning_time_ms": 0.128,
+      "execution_time_ms": 0.116,
+      "total_time_ms": 0.244,
+      "shared_hit_blocks": 21,
+      "shared_read_blocks": 0,
+      "top_node_type": "Bitmap Heap Scan + Bitmap Index Scan",
+      "actual_rows": 16,
+      "plan_text": "Limit  (cost=139.21..139.29 rows=31 width=76) (actual time=0.092..0.095 rows=16 loops=1)\n  Buffers: shared hit=21\n  ->  Sort  (cost=139.21..139.29 rows=31 width=76) (actual time=0.092..0.093 rows=16 loops=1)\n        Sort Key: created_at DESC\n        Sort Method: quicksort  Memory: 27kB\n        Buffers: shared hit=21\n        ->  Bitmap Heap Scan on transactions  (cost=24.09..138.45 rows=31 width=76) (actual time=0.065..0.082 rows=16 loops=1)\n              Recheck Cond: ((created_at >= (now() - '30 days'::interval)) AND (amount >= 250000.0000) AND (status = ANY ('{FAILED,PENDING}'::core.transaction_status_enum[])))\n              Heap Blocks: exact=16\n              Buffers: shared hit=21\n              ->  Bitmap Index Scan on idx_txn_non_completed_recent  (cost=0.00..24.08 rows=31 width=0) (actual time=0.057..0.057 rows=16 loops=1)\n                    Index Cond: ((created_at >= (now() - '30 days'::interval)) AND (amount >= 250000.0000))\n                    Buffers: shared hit=5\nPlanning Time: 0.128 ms\nExecution Time: 0.116 ms"
+    },
+    {
+      "name": "Q3: 14-Day Completed Settlement & Fee Reconciliation",
+      "phase": "optimised",
+      "planning_time_ms": 0.194,
+      "execution_time_ms": 2.825,
+      "total_time_ms": 3.019,
+      "shared_hit_blocks": 48,
+      "shared_read_blocks": 0,
+      "top_node_type": "Index Only Scan",
+      "actual_rows": 3,
+      "plan_text": "Sort  (cost=388.95..388.96 rows=2 width=76) (actual time=2.778..2.778 rows=3 loops=1)\n  Sort Key: (sum(amount)) DESC\n  Sort Method: quicksort  Memory: 25kB\n  Buffers: shared hit=48\n  ->  HashAggregate  (cost=388.91..388.94 rows=2 width=76) (actual time=2.768..2.770 rows=3 loops=1)\n        Group Key: transaction_type\n        Batches: 1  Memory Usage: 24kB\n        Buffers: shared hit=48\n        ->  Index Only Scan using idx_txn_status_created_cover on transactions  (cost=0.42..318.08 rows=7083 width=13) (actual time=0.027..1.061 rows=7284 loops=1)\n              Index Cond: ((status = 'COMPLETED'::core.transaction_status_enum) AND (created_at >= (now() - '14 days'::interval)))\n              Heap Fetches: 0\n              Buffers: shared hit=48\nPlanning Time: 0.194 ms\nExecution Time: 2.825 ms"
+    },
+    {
+      "name": "Q4: Case-Insensitive Customer KYC & Wallet Exposure Lookup",
+      "phase": "optimised",
+      "planning_time_ms": 0.222,
+      "execution_time_ms": 0.045,
+      "total_time_ms": 0.267,
+      "shared_hit_blocks": 8,
+      "shared_read_blocks": 0,
+      "top_node_type": "Index Scan",
+      "actual_rows": 1,
+      "plan_text": "Nested Loop  (cost=0.70..24.82 rows=1 width=268) (actual time=0.022..0.024 rows=1 loops=1)\n  Buffers: shared hit=8\n  ->  Nested Loop  (cost=0.43..16.52 rows=1 width=236) (actual time=0.016..0.017 rows=1 loops=1)\n        Buffers: shared hit=5\n        ->  Index Scan using idx_customers_lower_email on customers c  (cost=0.28..8.29 rows=1 width=77) (actual time=0.009..0.009 rows=1 loops=1)\n              Index Cond: (lower((email)::text) = 'bench_cust_0420@novapay-demo.ng'::text)\n              Buffers: shared hit=3\n        ->  Index Scan using kyc_tiers_pkey on kyc_tiers k  (cost=0.15..8.17 rows=1 width=216) (actual time=0.005..0.005 rows=1 loops=1)\n              Index Cond: ((tier_code)::text = (c.kyc_tier_code)::text)\n              Buffers: shared hit=2\n  ->  Index Scan using idx_accounts_customer_id on accounts a  (cost=0.28..8.29 rows=1 width=48) (actual time=0.006..0.006 rows=1 loops=1)\n        Index Cond: (customer_id = c.customer_id)\n        Buffers: shared hit=3\nPlanning:\n  Buffers: shared hit=6\nPlanning Time: 0.222 ms\nExecution Time: 0.045 ms"
+    }
+  ]
+}

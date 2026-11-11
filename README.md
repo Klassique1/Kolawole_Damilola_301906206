@@ -67,7 +67,7 @@ advanced-database-portfolio/
 
 - [x] Foundation, reusable `core/` framework, documentation, and local toolchain
 - [x] Portfolio 1: Database Design and Modelling
-- [ ] Portfolio 2: Query Processing and Optimisation
+- [x] Portfolio 2: Query Processing and Optimisation
 - [ ] Portfolio 3: Transactions and Concurrency
 - [ ] Portfolio 4: NoSQL and Advanced Data Models
 - [ ] Portfolio 5: Distributed and Cloud Database Exercise
