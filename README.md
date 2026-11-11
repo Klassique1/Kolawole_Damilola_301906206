@@ -2,6 +2,9 @@
 
 > **Course:** MIT 8103 Advanced Database Systems (2026/2027 First Semester CA)
 > **Assessment:** Individual Practical Database Portfolio (40 Marks)
+> **Student Name:** Kolawole Damilola Ayodeji
+> **Matriculation Number:** `301906206`
+> **Repository:** `https://github.com/Klassique1/Kolawole_Damilola_301906206`
 > **Case Study Domain:** Bank / Fintech Platform
 > **Relational Stack:** PostgreSQL 17 (`novapay_core`)
 > **NoSQL Stack:** MongoDB 9 (`novapay_telemetry`)
@@ -56,9 +59,10 @@ advanced-database-portfolio/
 
 ## 3. Documentation Index
 
+- **[Final LMS Portfolio Report (Markdown)](docs/LMS_FINAL_REPORT_DRAFT.md)** & **[Submission PDF](docs/Kolawole_Damilola_Ayodeji_301906206_MIT8103_Portfolio.pdf)** — Complete 3-page summary across Portfolios 1–5, ER diagram, evidence outputs, reflection, references, and AI declaration.
 - **[Setup, Isolated GitHub & Operations Runbook](docs/SETUP_AND_RUNBOOK.md)** — Local software install, isolated secondary GitHub setup, DB init, and progressive run workflow.
 - **[Reusability & Multi-Case-Study Guide](docs/REUSABILITY_GUIDE.md)** — How to clone and adapt this production architecture for any other case study.
-- **[LMS Final Documentation Blueprint](docs/LMS_SUBMISSION_GUIDE.md)** — Structure and 11-point pre-submission checklist for the 2–3 page LMS report.
+- **[LMS Final Documentation Blueprint](docs/LMS_SUBMISSION_GUIDE.md)** — Structure and pre-submission checklist for the LMS report.
 - **[Academic Integrity & AI Use Declaration](docs/AI_USE_DECLARATION.md)** — Audit log of AI assistance, human review, and verification steps.
 
 ---
@@ -71,4 +75,4 @@ advanced-database-portfolio/
 - [x] Portfolio 3: Transactions and Concurrency
 - [x] Portfolio 4: NoSQL and Advanced Data Models
 - [x] Portfolio 5: Distributed and Cloud Database Exercise
-- [x] Final Documentation & LMS Submission (Draft Ready)
+- [x] Final Documentation & LMS Submission (PDF Exported & Ready)

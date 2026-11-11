@@ -23,7 +23,9 @@
 
 ## 2. Entity-Relationship Diagram (ER Diagram)
 
-Source file: [diagrams/novapay_erd.mmd](diagrams/novapay_erd.mmd)
+Visual export: [diagrams/novapay_erd.svg](diagrams/novapay_erd.svg) | Mermaid source: [diagrams/novapay_erd.mmd](diagrams/novapay_erd.mmd)
+
+![NovaPay Fintech ER Diagram](diagrams/novapay_erd.svg)
 
 ```mermaid
 erDiagram

@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -24 1080 668" width="1080" height="668" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .title { font-size: 16px; font-weight: 700; fill: #0f2942; }
+      .subtitle { font-size: 11px; fill: #4a607a; }
+      .box { fill: #f8fafc; stroke: #1e3a5f; stroke-width: 1.6; rx: 6; ry: 6; }
+      .hdr { fill: #163a5f; }
+      .hdr-ref { fill: #265985; }
+      .hdr-audit { fill: #37474f; }
+      .hdr-text { font-size: 12px; font-weight: 700; fill: #ffffff; }
+      .col { font-size: 10.5px; fill: #1e293b; font-family: Consolas, 'Courier New', monospace; }
+      .pk { font-weight: 700; fill: #9a3412; }
+      .fk { font-weight: 700; fill: #1d4ed8; }
+      .uk { font-weight: 700; fill: #047857; }
+      .rel { fill: none; stroke: #334155; stroke-width: 1.5; }
+      .rel-dash { fill: none; stroke: #64748b; stroke-width: 1.3; stroke-dasharray: 5,4; }
+      .lbl { font-size: 10px; font-weight: 600; fill: #334155; background: #ffffff; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="-24" width="1080" height="668"/>
+
+  <!-- Relationship Connectors -->
+  <!-- KYC_TIERS -> CUSTOMERS -->
+  <path class="rel" d="M 400 165 L 400 210"/>
+  <text class="lbl" x="406" y="191">1 : 0..* governs_limits</text>
+
+  <!-- CURRENCIES -> TRANSACTIONS -->
+  <path class="rel" d="M 105 145 L 105 435"/>
+  <text class="lbl" x="111" y="300">1 : 0..* settles_in</text>
+
+  <!-- CURRENCIES -> ACCOUNTS -->
+  <path class="rel" d="M 210 145 L 210 184 L 615 184 L 615 210"/>
+  <text class="lbl" x="230" y="179">1 : 0..* denominates</text>
+
+  <!-- ACCOUNT_TYPES -> ACCOUNTS -->
+  <path class="rel" d="M 700 155 L 700 210"/>
+  <text class="lbl" x="706" y="190">1 : 0..* classifies</text>
+
+  <!-- CUSTOMERS -> ACCOUNTS -->
+  <path class="rel" d="M 515 290 L 575 290"/>
+  <text class="lbl" x="520" y="284">1 : 0..* owns</text>
+
+  <!-- CUSTOMERS -> TRANSACTIONS -->
+  <path class="rel" d="M 350 375 L 350 435"/>
+  <text class="lbl" x="356" y="408">1 : 0..* initiates</text>
+
+  <!-- ACCOUNTS -> TRANSACTIONS (source/dest) -->
+  <path class="rel" d="M 575 365 L 470 365 L 470 435"/>
+  <text class="lbl" x="476" y="395">src / dst</text>
+
+  <!-- TRANSACTIONS self-referencing reversal (0..1 : 0..1) -->
+  <path class="rel" d="M 30 505 L 10 505 L 10 558 L 30 558"/>
+  <text class="lbl" x="8" y="631">0..1 : 0..1 reversed_transaction_id (UNIQUE self-FK)</text>
+
+  <!-- TRANSACTIONS -> LEDGER_ENTRIES -->
+  <path class="rel" d="M 505 528 L 600 528"/>
+  <text class="lbl" x="514" y="521">1 : 1..* posts</text>
+
+  <!-- ACCOUNTS -> LEDGER_ENTRIES -->
+  <path class="rel" d="M 760 410 L 760 445"/>
+  <text class="lbl" x="766" y="432">1 : 0..* records</text>
+
+  <!-- CUSTOMERS -> AUDIT_LOGS (trigger) -->
+  <path class="rel-dash" d="M 515 225 L 545 225 L 545 -6 L 952 -6 L 952 20"/>
+  <text class="lbl" x="838" y="-11">trg_customers_audit</text>
+
+  <!-- 1. CURRENCIES -->
+  <g transform="translate(30,20)">
+    <rect class="box" width="210" height="125"/>
+    <path class="hdr-ref" d="M 6 0 H 204 Q 210 0 210 6 V 26 H 0 V 6 Q 0 0 6 0 Z"/>
+    <text class="hdr-text" x="12" y="18">core.currencies (3NF)</text>
+    <text class="col" x="10" y="44"><tspan class="pk">PK</tspan> currency_code CHAR(3)</text>
+    <text class="col" x="10" y="64">currency_name VARCHAR(64)</text>
+    <text class="col" x="10" y="84">minor_unit SMALLINT</text>
+    <text class="col" x="10" y="104">is_active BOOLEAN</text>
+  </g>
+
+  <!-- 2. KYC_TIERS -->
+  <g transform="translate(290,20)">
+    <rect class="box" width="230" height="145"/>
+    <path class="hdr-ref" d="M 6 0 H 224 Q 230 0 230 6 V 26 H 0 V 6 Q 0 0 6 0 Z"/>
+    <text class="hdr-text" x="12" y="18">core.kyc_tiers (3NF Limits)</text>
+    <text class="col" x="10" y="44"><tspan class="pk">PK</tspan> tier_code VARCHAR(16)</text>
+    <text class="col" x="10" y="63"><tspan class="uk">UK</tspan> tier_name VARCHAR(64)</text>
+    <text class="col" x="10" y="82">single_txn_limit NUMERIC(19,4)</text>
+    <text class="col" x="10" y="101">daily_txn_limit NUMERIC(19,4)</text>
+    <text class="col" x="10" y="120">max_wallet_balance NUMERIC(19,4)</text>
+    <text class="col" x="10" y="137">requires_bvn_nin BOOLEAN</text>
+  </g>
+
+  <!-- 3. ACCOUNT_TYPES -->
+  <g transform="translate(570,20)">
+    <rect class="box" width="240" height="135"/>
+    <path class="hdr-ref" d="M 6 0 H 234 Q 240 0 240 6 V 26 H 0 V 6 Q 0 0 6 0 Z"/>
+    <text class="hdr-text" x="12" y="18">core.account_types</text>
+    <text class="col" x="10" y="44"><tspan class="pk">PK</tspan> account_type_code VARCHAR</text>
+    <text class="col" x="10" y="63"><tspan class="uk">UK</tspan> display_name VARCHAR</text>
+    <text class="col" x="10" y="82">is_customer_facing BOOLEAN</text>
+    <text class="col" x="10" y="101">allow_negative_balance BOOL</text>
+    <text class="col" x="10" y="120">monthly_fee_amount NUMERIC</text>
+  </g>
+
+  <!-- 4. AUDIT_LOGS -->
+  <g transform="translate(850,20)">
+    <rect class="box" width="205" height="175"/>
+    <path class="hdr-audit" d="M 6 0 H 199 Q 205 0 205 6 V 26 H 0 V 6 Q 0 0 6 0 Z"/>
+    <text class="hdr-text" x="12" y="18">core.audit_logs</text>
+    <text class="col" x="10" y="44"><tspan class="pk">PK</tspan> audit_id BIGINT</text>
+    <text class="col" x="10" y="63">entity_name VARCHAR(64)</text>
+    <text class="col" x="10" y="82">entity_id TEXT</text>
+    <text class="col" x="10" y="101">action VARCHAR(32)</text>
+    <text class="col" x="10" y="120">old_state JSONB</text>
+    <text class="col" x="10" y="139">new_state JSONB</text>
+    <text class="col" x="10" y="158">actor VARCHAR | recorded_at</text>
+  </g>
+
+  <!-- 5. CUSTOMERS -->
+  <g transform="translate(270,210)">
+    <rect class="box" width="245" height="165"/>
+    <path class="hdr" d="M 6 0 H 239 Q 245 0 245 6 V 26 H 0 V 6 Q 0 0 6 0 Z"/>
+    <text class="hdr-text" x="12" y="18">core.customers</text>
+    <text class="col" x="10" y="44"><tspan class="pk">PK</tspan> customer_id UUID</text>
+    <text class="col" x="10" y="63">full_name VARCHAR(120)</text>
+    <text class="col" x="10" y="82"><tspan class="uk">UK</tspan> email VARCHAR(255)</text>
+    <text class="col" x="10" y="101"><tspan class="uk">UK</tspan> phone_number VARCHAR(20)</text>
+    <text class="col" x="10" y="120"><tspan class="fk">FK</tspan> kyc_tier_code VARCHAR(16)</text>
+    <text class="col" x="10" y="139">status customer_status_enum</text>
+    <text class="col" x="10" y="156">created_at | updated_at</text>
+  </g>
+
+  <!-- 6. ACCOUNTS -->
+  <g transform="translate(575,210)">
+    <rect class="box" width="250" height="200"/>
+    <path class="hdr" d="M 6 0 H 244 Q 250 0 250 6 V 26 H 0 V 6 Q 0 0 6 0 Z"/>
+    <text class="hdr-text" x="12" y="18">core.accounts (Strict Balances)</text>
+    <text class="col" x="10" y="44"><tspan class="pk">PK</tspan> account_id UUID</text>
+    <text class="col" x="10" y="63"><tspan class="uk">UK</tspan> account_number CHAR(10)</text>
+    <text class="col" x="10" y="82"><tspan class="fk">FK</tspan> customer_id UUID (NULL sys)</text>
+    <text class="col" x="10" y="101"><tspan class="fk">FK</tspan> account_type_code VARCHAR</text>
+    <text class="col" x="10" y="120"><tspan class="fk">FK</tspan> currency_code CHAR(3)</text>
+    <text class="col" x="10" y="139">balance NUMERIC(19,4) &gt;= 0</text>
+    <text class="col" x="10" y="158">available_balance &lt;= balance</text>
+    <text class="col" x="10" y="177">status ENUM | version BIGINT</text>
+    <text class="col" x="10" y="193">created_at | updated_at</text>
+  </g>
+
+  <!-- 7. TRANSACTIONS -->
+  <g transform="translate(30,435)">
+    <rect class="box" width="475" height="180"/>
+    <path class="hdr" d="M 6 0 H 469 Q 475 0 475 6 V 26 H 0 V 6 Q 0 0 6 0 Z"/>
+    <text class="hdr-text" x="12" y="18">core.transactions (Idempotent + 1:1 Reversal Guard)</text>
+    <text class="col" x="10" y="46"><tspan class="pk">PK</tspan> transaction_id UUID</text>
+    <text class="col" x="10" y="66"><tspan class="uk">UK</tspan> reference_code VARCHAR</text>
+    <text class="col" x="10" y="86"><tspan class="uk">UK</tspan> idempotency_key VARCHAR</text>
+    <text class="col" x="10" y="106">transaction_type ENUM</text>
+    <text class="col" x="10" y="126"><tspan class="fk">FK</tspan> source_account_id UUID</text>
+    <text class="col" x="10" y="146"><tspan class="fk">FK</tspan> destination_account_id UUID</text>
+    <text class="col" x="10" y="166"><tspan class="fk">FK</tspan> currency_code CHAR(3)</text>
+
+    <text class="col" x="245" y="46">amount NUMERIC(19,4) &gt; 0</text>
+    <text class="col" x="245" y="66">fee_amount NUMERIC(19,4) &gt;= 0</text>
+    <text class="col" x="245" y="86">status transaction_status</text>
+    <text class="col" x="245" y="106"><tspan class="uk">UK</tspan><tspan class="fk">FK</tspan> reversed_transaction_id</text>
+    <text class="col" x="245" y="126"><tspan class="fk">FK</tspan> initiated_by_customer_id</text>
+    <text class="col" x="245" y="146">narration | failure_reason</text>
+    <text class="col" x="245" y="166">created_at | completed_at</text>
+  </g>
+
+  <!-- 8. LEDGER_ENTRIES -->
+  <g transform="translate(600,445)">
+    <rect class="box" width="455" height="170"/>
+    <path class="hdr" d="M 6 0 H 449 Q 455 0 455 6 V 26 H 0 V 6 Q 0 0 6 0 Z"/>
+    <text class="hdr-text" x="12" y="18">core.ledger_entries (Append-Only Double-Entry Journal)</text>
+    <text class="col" x="10" y="46"><tspan class="pk">PK</tspan> entry_id BIGINT GENERATED ALWAYS</text>
+    <text class="col" x="10" y="66"><tspan class="fk">FK</tspan> transaction_id UUID (ON DELETE RESTRICT)</text>
+    <text class="col" x="10" y="86"><tspan class="fk">FK</tspan> account_id UUID (ON DELETE RESTRICT)</text>
+    <text class="col" x="10" y="106">direction ENUM ('DEBIT','CREDIT')</text>
+    <text class="col" x="10" y="126">amount NUMERIC(19,4) &gt; 0 | balance_after</text>
+    <text class="col" x="10" y="146"><tspan class="uk">UK</tspan> (transaction_id, account_id, direction)</text>
+    <text class="col" x="10" y="162">Trigger: trg_ledger_immutable (SQLSTATE 42501)</text>
+  </g>
+</svg>

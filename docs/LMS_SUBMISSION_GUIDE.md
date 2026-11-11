@@ -27,11 +27,11 @@ Use this blueprint to produce your final **2–3 page PDF/DOCX submission** for 
 
 ## Pre-Submission Checklist (Section 12)
 
-- [ ] Selected case study/organisation is clearly stated upfront.
-- [ ] All five portfolio activities use the **same** case study consistently.
-- [ ] All five portfolio activities are complete with runnable scripts and captured evidence.
-- [ ] Private GitHub repository follows clean structure and shows **progressive commits**.
-- [ ] Assessor has active access to the private GitHub repository **before** LMS submission.
-- [ ] README files clearly explain implementation and testing in every folder.
-- [ ] LMS 2–3 page report includes GitHub link, screenshots/evidence, reflection, references, and AI Use Declaration.
-- [ ] You can personally explain every schema choice, SQL query, execution plan, lock, and NoSQL model if selected for verification.
+- [x] Selected case study/organisation is clearly stated upfront.
+- [x] All five portfolio activities use the **same** case study consistently.
+- [x] All five portfolio activities are complete with runnable scripts and captured evidence.
+- [x] GitHub repository follows clean structure and shows **progressive commits**.
+- [ ] Private GitHub repository visibility confirmed and assessor invited as collaborator **before** LMS submission.
+- [x] README files clearly explain implementation and testing in every folder.
+- [x] LMS 2–3 page PDF report (`docs/Kolawole_Damilola_Ayodeji_301906206_MIT8103_Portfolio.pdf`) includes GitHub link, ER diagram/evidence outputs, technical reflection, references, and AI Use Declaration.
+- [ ] Upload the finalized PDF report (`docs/Kolawole_Damilola_Ayodeji_301906206_MIT8103_Portfolio.pdf`) through the LMS and ensure readiness to explain any part if selected for verification.

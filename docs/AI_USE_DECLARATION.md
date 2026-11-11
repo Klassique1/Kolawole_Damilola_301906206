@@ -1,6 +1,11 @@
 # Academic Integrity & AI Use Declaration
 
-In accordance with **Section 11 (Academic Integrity and AI Use Declaration)** of the MIT 8103 assignment brief, review and finalize this declaration before LMS submission.
+- **Student Name:** Kolawole Damilola Ayodeji
+- **Matriculation Number:** `301906206`
+- **Course:** MIT 8103 Advanced Database Systems (2026/2027 First Semester CA)
+- **Repository:** `https://github.com/Klassique1/Kolawole_Damilola_301906206`
+
+In accordance with **Section 11 (Academic Integrity and AI Use Declaration)** of the MIT 8103 assignment brief, this record declares all AI tools used, their scope, and how all outputs were reviewed, corrected, executed, and verified against live PostgreSQL 17.11 and MongoDB 9.0.4 engines.
 
 | Stage / Portfolio | AI Tool Used | Purpose of Use | How Output Was Reviewed, Corrected, Tested & Verified |
 | :--- | :--- | :--- | :--- |
