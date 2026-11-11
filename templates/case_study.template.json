@@ -1,0 +1,46 @@
+{
+  "organisation": {
+    "name": "Example Organisation Ltd",
+    "short_code": "example_org",
+    "domain_type": "E-commerce Platform | Hospital System | University Portal | Logistics",
+    "nature_of_business": "Describe the organisation's business/system purpose and operational context.",
+    "target_currency": "USD"
+  },
+  "database_users": [
+    {
+      "role": "Primary End User",
+      "purpose": "Describe primary user interactions with the database."
+    },
+    {
+      "role": "Operations / Staff",
+      "purpose": "Describe operational workflows."
+    },
+    {
+      "role": "Administrator / Analyst",
+      "purpose": "Describe reporting, auditing, and maintenance responsibilities."
+    }
+  ],
+  "major_data_stored": [
+    "Core master entities",
+    "Transactional records",
+    "Semi-structured logs/documents for NoSQL"
+  ],
+  "key_operations": [
+    "Core transactional workflow (CRUD + ACID)",
+    "Analytical reporting & indexed retrieval",
+    "Concurrent resource reservation / state update",
+    "High-volume semi-structured event ingestion"
+  ],
+  "databases": {
+    "relational": {
+      "engine": "PostgreSQL 17",
+      "database_name": "example_core",
+      "schema_name": "core"
+    },
+    "nosql": {
+      "engine": "MongoDB 9",
+      "database_name": "example_nosql",
+      "model_type": "Document"
+    }
+  }
+}

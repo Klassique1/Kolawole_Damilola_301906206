@@ -1,0 +1,31 @@
+# Environment & secrets (NEVER commit credentials)
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Local database data & runtime logs
+pgdata/
+mongodata/
+*.log
+*.pid
+
+# Local SSH / key files if accidentally placed in repo
+*.pem
+*.key
+id_ed25519*
+
+# OS & Editor artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

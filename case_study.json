@@ -1,0 +1,53 @@
+{
+  "organisation": {
+    "name": "NovaPay Fintech Ltd",
+    "short_code": "novapay",
+    "domain_type": "Bank / Fintech Platform",
+    "nature_of_business": "Simulated digital banking and instant payment platform offering multi-account wallet management, peer-to-peer transfers, deposits, withdrawals, transaction reversals, and compliance auditing.",
+    "target_currency": "NGN"
+  },
+  "database_users": [
+    {
+      "role": "Retail & Business Customers",
+      "purpose": "View balances, initiate P2P transfers, fund wallets, withdraw funds, inspect transaction receipts."
+    },
+    {
+      "role": "Operations & Settlement Officers",
+      "purpose": "Monitor failed settlements, process authorised transaction reversals, reconcile daily ledger totals."
+    },
+    {
+      "role": "Compliance & Fraud Analysts",
+      "purpose": "Audit immutable ledger records, inspect high-risk transfer alerts, investigate anomalous device/session events."
+    },
+    {
+      "role": "Database Administrators & Platform Engineers",
+      "purpose": "Manage schemas, tune indexes, enforce transaction isolation, configure partitioning, replication, and backups."
+    }
+  ],
+  "major_data_stored": [
+    "Customer profiles & KYC verification tiers",
+    "Financial accounts, account types, balances, and account statuses",
+    "Transfers, deposits, withdrawals, and reversal links",
+    "Immutable double-entry ledger postings (debit/credit journal entries)",
+    "Idempotency records, audit logs, and semi-structured fraud/telemetry events (NoSQL)"
+  ],
+  "key_operations": [
+    "Onboard customers and provision typed financial accounts with KYC limits",
+    "Execute atomic peer-to-peer fund transfers with double-entry ledger postings",
+    "Process deposits, withdrawals, and full/partial reversals of failed transactions",
+    "Generate paginated account statements and monthly reconciliation reports",
+    "Audit high-value/flagged transactions and detect concurrent race conditions (double-spend prevention)"
+  ],
+  "databases": {
+    "relational": {
+      "engine": "PostgreSQL 17",
+      "database_name": "novapay_core",
+      "schema_name": "core"
+    },
+    "nosql": {
+      "engine": "MongoDB 9",
+      "database_name": "novapay_telemetry",
+      "model_type": "Document"
+    }
+  }
+}
