@@ -71,4 +71,4 @@ advanced-database-portfolio/
 - [x] Portfolio 3: Transactions and Concurrency
 - [x] Portfolio 4: NoSQL and Advanced Data Models
 - [x] Portfolio 5: Distributed and Cloud Database Exercise
-- [ ] Final Documentation & LMS Submission
+- [x] Final Documentation & LMS Submission (Draft Ready)
